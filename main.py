@@ -1,1 +1,1 @@
-fuck will
+scott is cool
