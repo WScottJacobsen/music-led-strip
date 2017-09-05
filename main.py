@@ -1,1 +1,2 @@
-scott is cool
+scott is dumb
+
