@@ -19,9 +19,12 @@ from dotstar import Adafruit_DotStar
 strip      = None
 num_pixels = 0
 
-def set_strip(_strip, _num_pixels):
-    strip      = _strip
-    num_pixels = _num_pixels
+
+def set_strip(s, np):
+    global strip
+    global num_pixels
+    strip = s
+    num_pixels = np
 
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
