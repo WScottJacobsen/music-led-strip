@@ -1,11 +1,12 @@
 # Main file to drive LEDs
 
 import time
+import math
 from dotstar import Adafruit_DotStar
 
 num_pixels = 288 # Number of LEDs in strip
 
-strip = Adafruit_DotStar(numpixels, 12000000) #Initialize strip
+strip = Adafruit_DotStar(num_pixels, 12000000) #Initialize strip
 strip.begin()
 strip.setBrightness(50)
 
@@ -27,4 +28,4 @@ start = 0
 while True:
     strip.show()
     display_rainbow(0.3, start)
-    start++ #Shifts rainbow down strip
+    start += 1 #Shifts rainbow down strip
