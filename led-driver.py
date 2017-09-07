@@ -34,8 +34,8 @@ def set_all_pixels(r, g, b):
 start = 0.0
 while True:
     strip.show()
-    color = get_rainbow_color(0.1, start)
-    set_all_pixels(color[0], color[1], color[2])
-    #moving_rainbow(0.3, start)
+    #color = get_rainbow_color(0.1, start)
+    #set_all_pixels(color[0], color[1], color[2])
+    moving_rainbow(0.3, start)
     start += 1 # Shifts rainbow down strip
     time.sleep(1.0 / 60) # Pause 20 milliseconds (~50 fps)
