@@ -30,9 +30,9 @@ def get_rainbow_color(frequency = 0.3, position = 0):
     # Uses three out of sync sin waves to have a smooth transition between colors
     # Frequency is how quickly it moves throught the rainbow
     # Position is where in the rainbow it is
-    red   = int(math.sin(frequency * (start + offset)) * 127 + 128)
-    green = int(math.sin(frequency * (start + offset) + 2 * math.pi / 3) * 127 + 128)
-    blue  = int(math.sin(frequency * (start + offset) + 4 * math.pi / 3) * 127 + 128)
+    red   = int(math.sin(frequency * position) * 127 + 128)
+    green = int(math.sin(frequency * position + 2 * math.pi / 3) * 127 + 128)
+    blue  = int(math.sin(frequency * position + 4 * math.pi / 3) * 127 + 128)
     return rgb_to_hex(red, green, blue)
 
 def set_all_pixels(color):
