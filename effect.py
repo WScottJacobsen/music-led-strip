@@ -62,9 +62,8 @@ def solid_rainbow(frequency = 0.1):
     set_all_pixels(get_rainbow_color(frequency, pos))
     pos += 1
 
-def wander(speed = 0.3, start_color = None, index = 0, wave = True):
-    if start_color == None:
-        print("test")
+def wander(speed = 0.3, start_color = -1, index = 0, wave = True):
+    if start_color == -1:
         start_color = get_rainbow_color(speed)
     strip.setPixelColor(0, start_color) # Set first pixel to starting color
     curr_color = start_color
