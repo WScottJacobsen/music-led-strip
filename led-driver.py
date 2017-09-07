@@ -37,5 +37,4 @@ while True:
     color = get_rainbow_color(0.3, start)
     set_all_pixels(color[0], color[1], color[2])
     start += 1 # Shifts rainbow down strip
-    start %= num_pixels
-    time.sleep(1.0 / 50) # Pause 20 milliseconds (~50 fps)
+    time.sleep(1.0 / 20) # Pause 20 milliseconds (~50 fps)
