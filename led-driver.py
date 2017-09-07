@@ -10,12 +10,12 @@ num_pixels = 288 # Number of LEDs in strip
 
 strip = Adafruit_DotStar(num_pixels, 12000000, order='bgr') # Initialize strip
 strip.begin()
-strip.setBrightness(10) # Save my eyes
+strip.setBrightness(100) # Save my eyes
 
 # Rainbow Display
 def moving_rainbow(frequency, start = 0):
     for i in range(0, num_pixels):
-        color = get_rainbow_color(i, start)
+        color = get_rainbow_color(frequency, i, start)
         strip.setPixelColor(i, color[0], color[1], color[2])
 
 def get_rainbow_color(frequency, start, offset = 0):
