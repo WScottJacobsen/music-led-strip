@@ -16,8 +16,6 @@ from dotstar import Adafruit_DotStar
 
 #===================   HELPER FUNCTIONS   ===================#
 
-strip      = None
-num_pixels = 0
 
 
 def set_strip(s, np):
