@@ -1,23 +1,27 @@
 # Effects in this module:
-# Rainbow Wave  - moving_rainbow
-# Solid Rainbow - solid_rainbow
-# Wander        - wander
+# Rainbow Wave  - moving_rainbow - Rainbow 'wave' that moves down strip
+# Solid Rainbow - solid_rainbow  - Full strip
+# Wander        - wander         - Colors of pixels are relative to previous pixel
+# Breate        - breathe        - Can be used with any effect, brightness pulses
 
 # Functions in this module
 # set_strip         - tells effects what strip to use
 # rgb_to_hex        - returns integer value from red, green, and blue channels
 # get_rainbow_color - returns color, given position in the rainbow
 # set_all_pixels    - sets all pixels on strip to given color
+# translate         - maps one range of values to a different range of values
 
 import time, math, random
 from dotstar import Adafruit_DotStar
 
 #===================   HELPER FUNCTIONS   ===================#
 
-strip = None
+strip      = None
+num_pixels = 0
 
-def set_strip(led_strip):
-    strip = led_strip
+def set_strip(_strip, _num_pixels):
+    strip      = _strip
+    num_pixels = _num_pixels
 
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
@@ -35,9 +39,19 @@ def set_all_pixels(color):
     for i in range(0, num_pixels):
         strip.setPixelColor(i, color)
 
+def translate(value, leftMin, leftMax, rightMin, rightMax):
+    # Figure out how 'wide' each range is
+    leftSpan = leftMax - leftMin
+    rightSpan = rightMax - rightMin
+
+    valueScaled = float(value - leftMin) / float(leftSpan) # Convert the left range into a 0-1 range
+
+    return rightMin + (valueScaled * rightSpan) # Convert the 0-1 range into a value in the right range.
+
 #===================   EFFECTS   ===================#
 
 pos = 0
+
 def moving_rainbow(frequency = 0.1):
     for i in range(0, num_pixels):
         color = get_rainbow_color(frequency, i + pos)
@@ -60,4 +74,8 @@ def wander(speed = 0.3, start_color = get_rainbow_color(speed), index = 0, wave 
         curr_color = next_color
         curr_index = next_index
         if wave:
-            time.sleep(1 / 20) # Give it a "wave" effect
+            time.sleep(1 / 20) # Give it a 'wave' effect
+
+def breathe(speed = 0.1):
+    strip.setBrightness(translate(math.sin(speed * pos), -1, 1, 0, 100))
+    pos += 1
