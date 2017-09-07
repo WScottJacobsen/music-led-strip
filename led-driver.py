@@ -1,7 +1,7 @@
 # Main file to drive LEDs
 
 import time
-import math
+import ma
 from dotstar import Adafruit_DotStar
 
 num_pixels = 288 # Number of LEDs in strip
