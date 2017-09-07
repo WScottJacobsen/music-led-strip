@@ -2,15 +2,13 @@
 
 import time
 import math
-# Attempt to import the real library, but if it doesn't exists then
-# import the spoofed emulator version.
 from dotstar import Adafruit_DotStar
 
 num_pixels = 288 # Number of LEDs in strip
 
 strip = Adafruit_DotStar(num_pixels, 12000000, order='bgr') # Initialize strip
 strip.begin()
-strip.setBrightness(100) # Save my eyes
+strip.setBrightness(10) # Save my eyes
 
 # Rainbow Display
 def moving_rainbow(frequency, start = 0):
@@ -20,7 +18,9 @@ def moving_rainbow(frequency, start = 0):
 
 def get_rainbow_color(frequency, start, offset = 0):
     # Uses three out of sync sin waves to have a smooth transition between colors
-    # frequency is how quickly it moves throught the rainbow, start is the position in the rainbow, offset is how much it is offset by
+    # Frequency is how quickly it moves throught the rainbow
+    # Start is position in rainbow
+    # Offset is how much the rainbow is offset by (duh)
     red   = int(math.sin(frequency * (start + offset)) * 127 + 128)
     green = int(math.sin(frequency * (start + offset) + 2 * math.pi / 3) * 127 + 128)
     blue  = int(math.sin(frequency * (start + offset) + 4 * math.pi / 3) * 127 + 128)
