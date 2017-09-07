@@ -35,7 +35,7 @@ start = 0.0
 while True:
     strip.show()
     #color = get_rainbow_color(0.1, start)
-    #set_all_pixels(color[0], color[1], color[2])
+    #set_all_pixels(color[0], color[1], color[2]) Solid rainbow effect
     moving_rainbow(0.1, start)
     start += 1 # Shifts rainbow down strip
     time.sleep(1.0 / 60) # Pause 20 milliseconds (~50 fps)
