@@ -62,7 +62,7 @@ def solid_rainbow(frequency = 0.1):
     set_all_pixels(get_rainbow_color(frequency, pos))
     pos += 1
 
-def wander(speed = 0.3, start_color, index = 0, wave = True):
+def wander(start_color, speed = 0.3, index = 0, wave = True):
     if start_color:
         print("tst")
         start_color = get_rainbow_color(speed)
