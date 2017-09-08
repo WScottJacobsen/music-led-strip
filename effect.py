@@ -1,12 +1,16 @@
 # Effects in this module:
 # Rainbow Wave  - moving_rainbow - Rainbow 'wave' that moves down strip
 # Solid Rainbow - solid_rainbow  - Full strip
-# Wander        - wander         - Colors of pixels are relative to previous pixel
+# Wander        - wander         - Color wanders relative to the pixel before it
+# Wander 2      - wander_2       - Color wanders relative to previous color
 # Breate        - breathe        - Can be used with any effect, brightness pulses
 
 # Functions in this module
 # set_strip         - tells effects what strip to use
 # rgb_to_hex        - returns integer value from red, green, and blue channels
+# hex_to_rgb        - returns red green and blue values from integer
+# hsl_to_rgb        - converts from the hsl color model to the rgb color model
+# rgb_to_hsl        - converts from the rgb color model to the hsl color model
 # get_rainbow_color - returns color, given position in the rainbow
 # set_all_pixels    - sets all pixels on strip to given color
 # translate         - maps one range of values to a different range of values
@@ -15,8 +19,6 @@ import time, math, random
 from dotstar import Adafruit_DotStar
 
 #===================   HELPER FUNCTIONS   ===================#
-
-
 
 def set_strip(s, np):
     global strip

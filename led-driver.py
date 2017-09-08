@@ -12,5 +12,5 @@ strip.setBrightness(10) # Save my eyes
 effect.set_strip(strip, num_pixels) # Set up effects module
 while True:
     strip.show()
-    effect.wander()
+    effect.moving_rainbow()
     time.sleep(1 / 60.0) # Pause 20 milliseconds (~60 fps)
