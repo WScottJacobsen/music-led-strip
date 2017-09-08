@@ -98,7 +98,7 @@ def wander_2(speed = 0.03):
     for i in range(0, num_pixels):
         curr_color = strip.getPixelColor(i)
         rgb = hex_to_rgb(curr_color)
-        if i == 1:
+        if i == 0:
             print(rgb[0], rgb[1], rgb[2])
         hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
         rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], hsv[2])
