@@ -39,8 +39,6 @@ def hex_to_rgb(color):
 
 # From: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
 def hsl_to_rgb(h, s, l):
-    r, g, b
-
     if s == 0:
         r = g = b = l # Monochromatic
     else:
