@@ -138,7 +138,7 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
 def breathe(speed = 0.1):
     global pos
     for i in range(0, num_pixels):
-        c = hex_to_rgb(strand.getPixelColor(i))
+        c = hex_to_rgb(strip.getPixelColor(i))
         red, green, blue = c[0], c[1], c[2]
 
         # Convert rgb to hsl, change luminance value, convert back to rgb
