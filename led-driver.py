@@ -14,5 +14,9 @@ effect.set_strip(strip, num_pixels) # Set up effects module
 while True:
     strip.show()
     effect.solid_rainbow()
+<<<<<<< HEAD
     effect.breathe(0.05, max_brightness)
+=======
+    effect.breathe(0.5, max_brightness)
+>>>>>>> 6e37d67e651b889492cfc7f60afda5626f268bbe
     time.sleep(1 / 60.0) # Pause 20 milliseconds (~60 fps)
