@@ -34,9 +34,9 @@ def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
 
 def hex_to_rgb(color):
-    r = ((color >> 16) & 0xFF) / 255.0
-    g = ((color >> 8) & 0xFF) / 255.0
-    b = ((color) & 0xFF) / 255.0
+    r = ((color >> 16) & 0xFF)
+    g = ((color >> 8) & 0xFF)
+    b = ((color) & 0xFF)
     return [r, g, b]
 
 def get_rainbow_color(frequency = 0.3, position = 0):
