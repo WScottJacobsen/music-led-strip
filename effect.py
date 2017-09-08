@@ -93,7 +93,7 @@ def all_random():
     for i in range(0, num_pixels):
         strip.setPixelColor(i, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-def wander_2(speed = 0.2):
+def wander_2(speed = 0.01):
     # Get current color of each pixel, change it to hsv, increment hue value, convert back to rgb and set color
     for i in range(0, num_pixels):
         curr_color = strip.getPixelColor(i)
