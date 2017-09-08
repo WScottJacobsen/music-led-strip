@@ -134,6 +134,7 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
 # It is not recommended to use setBrightness except for in setup because of timing issues,
 # So it is done manually.
 def breathe(speed = 0.1):
+<<<<<<< HEAD
     # global pos
     # for i in range(0, num_pixels):
     #     c = hex_to_rgb(strip.getPixelColor(i))
@@ -149,3 +150,19 @@ def breathe(speed = 0.1):
     #
     # pos += 1
     strip.setBrightness(translate(math.sin(speed * pos), -1, 1, 0, 100))
+=======
+    global pos
+    for i in range(0, num_pixels):
+        c = hex_to_rgb(strip.getPixelColor(i))
+        red, green, blue = c[0], c[1], c[2]
+
+        # Convert rgb to hsl, change luminance value, convert back to rgb
+        hsl = rgb_to_hsl(red, green, blue)
+        hsl[2] = translate(math.sin(speed * pos), -1, 1, 0, 100)
+        rgb = hsl_to_rgb(hsl[0], hsl[1], hsl[2])
+        rgb = rgb_to_hex(rgb[0], rgb[1], rgb[2])
+
+        strip.setPixelColor(i, rgb)
+
+    pos += 1
+>>>>>>> d07d78c84d858a312c31c65359bff8c95aec3390
