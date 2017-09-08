@@ -107,7 +107,7 @@ def wander_2(speed = 0.03):
         g = rgb[1] * 255
         b = rgb[2] * 255
         if i == 1:
-            print(r, g, b)
+            print(hsv[0], hsv[1], hsv[2])
         strip.setPixelColor(i, int(r), int(g), int(b))
 
 def breathe(speed = 0.05, max_brightness = 100):
