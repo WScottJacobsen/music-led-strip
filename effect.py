@@ -65,7 +65,7 @@ def rgb_to_hsl(r, g, b):
     g /= 255
     b /= 255
     max_val, min_val = max(r, g, b), min(r, g, b)
-    h, s, l = (max_val + min_val) / 2
+    h = s = l = (max_val + min_val) / 2
 
     if max_val == min_val:
         h = s = 0 # Monochromatic
