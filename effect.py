@@ -135,9 +135,5 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
 
 def breathe(speed = 0.05):
     global breathe_pos
-<<<<<<< HEAD
-    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 1, 100)))
-=======
-    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 0, 100)))
->>>>>>> a84c148176b9848c97b26621596d380c0fe7db67
+    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 10, 100)))
     breathe_pos += 1
