@@ -98,10 +98,11 @@ def wander_2(speed = 0.03):
     for i in range(0, num_pixels):
         curr_color = strip.getPixelColor(i)
         rgb = hex_to_rgb(curr_color)
-        hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
-        rgb = colorsys.hsv_to_rgb((hsv[0] + random.uniform(-1, 1) * speed), hsv[1], hsv[2])
         if i == 1:
-            print(hsv[0], hsv[1], hsv[2])
+            print(rgb[0], rgb[1], rgb[2])
+        hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
+        rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], hsv[2])
+
         strip.setPixelColor(i, int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def breathe(speed = 0.05, max_brightness = 100):
