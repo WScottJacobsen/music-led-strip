@@ -105,7 +105,7 @@ def wander_2(speed = 0.03):
         g = rgb[1]
         b = rgb[2]
         hsv = colorsys.rgb_to_hsv(r, g, b)
-        print(hsv[0], hsv[1], hsv[2])
+        #print(hsv[0], hsv[1], hsv[2])
         rgb = colorsys.hsv_to_rgb(hsv[0] + random.uniform(-1, 1) * speed, hsv[1], hsv[2])
         r = translate(rgb[0], 0, 1, 0, 255)
         g = translate(rgb[1], 0, 1, 0, 255)
