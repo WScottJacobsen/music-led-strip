@@ -126,7 +126,7 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
         strip.setPixelColor(i, next_color)
         curr_index = next_index
         if wave:
-            print("wave")
+            strip.show()
             time.sleep(1 / 120.0) # Give it a 'wave' effect
 
 # It is not recommended to use setBrightness except for in setup because of timing issues,
