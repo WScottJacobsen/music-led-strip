@@ -13,4 +13,5 @@ effect.set_strip(strip, num_pixels) # Set up effects module
 while True:
     strip.show()
     effect.moving_rainbow()
+    effect.breathe()
     time.sleep(1 / 60.0) # Pause 20 milliseconds (~60 fps)

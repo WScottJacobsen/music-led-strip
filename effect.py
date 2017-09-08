@@ -107,15 +107,15 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
 #===================   EFFECTS   ===================#
 
-pos = 0
-
 def moving_rainbow(frequency = 0.1):
+    global pos
     for i in range(0, num_pixels):
         color = get_rainbow_color(frequency, i + pos)
         strip.setPixelColor(i, color)
     pos += 1
 
 def solid_rainbow(frequency = 0.1):
+    global pos
     set_all_pixels(get_rainbow_color(frequency, pos))
     pos += 1
 
@@ -136,6 +136,7 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
 # It is not recommended to use setBrightness except for in setup because of timing issues,
 # So it is done manually.
 def breathe(speed = 0.1):
+    global pos
     for i in range(0, num_pixels):
         c = hex_to_rgb(strand.getPixelColor(i))
         red, green, blue = c[0], c[1], c[2]
