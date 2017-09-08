@@ -4,18 +4,17 @@
 # Wander        - wander         - Color wanders relative to the pixel before it
 # Wander 2      - wander_2       - Color wanders relative to previous color
 # Breate        - breathe        - Can be used with any effect, brightness pulses
+# All Random    - all_random     - Assigns all pixels a random color, ugly as shit
 
 # Functions in this module
 # set_strip         - initialize variables
 # rgb_to_hex        - returns integer value from red, green, and blue channels
 # hex_to_rgb        - returns red green and blue values from integer
-# hsl_to_rgb        - converts from the hsl color model to the rgb color model
-# rgb_to_hsl        - converts from the rgb color model to the hsl color model
 # get_rainbow_color - returns color, given position in the rainbow
 # set_all_pixels    - sets all pixels on strip to given color
 # translate         - maps one range of values to a different range of values
 
-import time, math, random
+import time, math, random, colorsys
 from dotstar import Adafruit_DotStar
 
 #===================   HELPER FUNCTIONS   ===================#
@@ -29,6 +28,7 @@ def set_strip(s, np):
     num_pixels = np
     pos = 0
     breathe_pos = 0
+    all_random() # Give it random starting values
 
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
@@ -38,50 +38,6 @@ def hex_to_rgb(color):
     g = ((color >> 8) & 0xFF) / 255.0
     b = ((color) & 0xFF) / 255.0
     return [r, g, b]
-
-# From: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-def hsl_to_rgb(h, s, l):
-    if s == 0:
-        r = g = b = l # Monochromatic
-    else:
-        def hue2rgb(p, q, t):
-            if(t < 0): t += 1
-            if(t > 1): t -= 1
-            if(t < 1/6): return p + (q - p) * 6 * t
-            if(t < 1/2): return q
-            if(t < 2/3): return p + (q - p) * (2/3 - t) * 6
-            return p
-        q = l * (1 + s) if l < 0.5 else l + s - l * s
-        p = 2 * l - q
-        r = hue2rgb(p, q, h + 1/3)
-        g = hue2rgb(p, q, h)
-        b = hue2rgb(p, q, h - 1/3)
-
-    return [int(round(r * 255)), int(round(g * 255)), int(round(b * 255))]
-
-# Also from: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-def rgb_to_hsl(r, g, b):
-    r /= 255
-    g /= 255
-    b /= 255
-    max_val, min_val = max(r, g, b), min(r, g, b)
-    h = s = l = (max_val + min_val) / 2
-
-    if max_val == min_val:
-        h = s = 0 # Monochromatic
-    else:
-        d = max_val - min_val
-        s = d / (2 - max_val - min_val) if l > 0.5 else d / (max_val + min_val)
-        def get_h(x):
-            return {
-                r: (g - b) / d + (6 if g < b else 0),
-                g: (b - r) / d + 2,
-                b: (r - g) / d + 4
-            }[x]
-        h = get_h(max_val)
-        h /= 6
-
-    return [h, s, l]
 
 def get_rainbow_color(frequency = 0.3, position = 0):
     # Uses three out of sync sin waves to have a smooth transition between colors
@@ -133,7 +89,27 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
             strip.show()
             time.sleep(1 / 120.0) # Give it a 'wave' effect
 
+def all_random():
+    for i in range(0, num_pixels):
+        strip.setPixelColor(i, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+def wander_2(speed = 0.03):
+    # Get current color of each pixel, change it to hsv, increment hue value, convert back to rgb and set color
+    for i in range(0, num_pixels):
+        curr_color = strip.getPixelColor(i)
+        rgb = hex_to_rgb(curr_color)
+        r = translate(rgb[0], 0, 255, 0, 1)
+        g = translate(rgb[1], 0, 255, 0, 1)
+        b = translate(rgb[2], 0, 255, 0, 1)
+        hsv = colorsys.rgb_to_hsv(r, g, b)
+        hsv[0] += random.uniform(-1, 1) * speed
+        rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], hsv[2])
+        r = translate(rgb[0], 0, 1, 0, 255)
+        g = translate(rgb[1], 0, 1, 0, 255)
+        b = translate(rgb[2], 0, 1, 0, 255)
+        strip.setPixelColor(i, r, g, b)
+
 def breathe(speed = 0.05, max_brightness = 100):
     global breathe_pos
-    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 10, max_brightness)))
+    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 5, max_brightness)))
     breathe_pos += 1
