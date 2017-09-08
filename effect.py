@@ -21,8 +21,10 @@ from dotstar import Adafruit_DotStar
 def set_strip(s, np):
     global strip
     global num_pixels
+    global pos
     strip = s
     num_pixels = np
+    pos = 0
 
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
@@ -51,8 +53,6 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
 #===================   EFFECTS   ===================#
 
-pos = 0
-
 def moving_rainbow(frequency = 0.1):
     for i in range(0, num_pixels):
         color = get_rainbow_color(frequency, i + pos)
@@ -65,19 +65,17 @@ def solid_rainbow(frequency = 0.1):
 
 def wander(speed = 0.3, start_color = None, index = 0, wave = True):
     if start_color is None:
-        start_color = get_rainbow_color(speed)
+        start_color = get_rainbow_color(speed, index)
     strip.setPixelColor(0, start_color) # Set first pixel to starting color
-    curr_color = start_color
     curr_index = index
-    for i in range(1, num_pixels):
+    for i in range(0, num_pixels):
         next_index = curr_index + random.randint(-1, 1) # Get position for next color, relative to previous pixel
         next_color = get_rainbow_color(speed, next_index) # Get color at new_index
         strip.setPixelColor(i, next_color)
-        curr_color = next_color
         curr_index = next_index
         if wave:
             print("wave")
-            time.sleep(1 / 20) # Give it a 'wave' effect
+            time.sleep(1 / 120.0) # Give it a 'wave' effect
 
 def breathe(speed = 0.1):
     strip.setBrightness(translate(math.sin(speed * pos), -1, 1, 0, 100))
