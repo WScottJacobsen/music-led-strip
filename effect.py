@@ -59,7 +59,9 @@ def hsl_to_rgb(h, s, l):
 
 # Also from: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
 def rgb_to_hsl(r, g, b):
-    r /= 255, g /= 255, b /= 255
+    r /= 255
+    g /= 255
+    b /= 255
     max_val, min_val = max(r, g, b), min(r, g, b)
     h, s, l = (max_val + min_val) / 2
 
