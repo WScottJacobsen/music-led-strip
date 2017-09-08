@@ -107,6 +107,8 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
 #===================   EFFECTS   ===================#
 
+pos = 0
+
 def moving_rainbow(frequency = 0.1):
     for i in range(0, num_pixels):
         color = get_rainbow_color(frequency, i + pos)
