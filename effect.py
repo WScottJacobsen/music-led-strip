@@ -143,7 +143,7 @@ def breathe(speed = 0.1):
         hsl = rgb_to_hsl(red, green, blue)
         hsl[2] = translate(math.sin(speed * pos), -1, 1, 0, 100)
         rgb = hsl_to_rgb(hsl[0], hsl[1], hsl[2])
-        rgb = rgb_to_hex(rgb)
+        rgb = rgb_to_hex(rgb[0], rgb[1], rgb[2])
 
         strip.setPixelColor(i, rgb)
 
