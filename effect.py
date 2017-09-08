@@ -6,7 +6,7 @@
 # Breate        - breathe        - Can be used with any effect, brightness pulses
 
 # Functions in this module
-# set_strip         - tells effects what strip to use
+# set_strip         - initialize variables
 # rgb_to_hex        - returns integer value from red, green, and blue channels
 # hex_to_rgb        - returns red green and blue values from integer
 # hsl_to_rgb        - converts from the hsl color model to the rgb color model
@@ -24,9 +24,11 @@ def set_strip(s, np):
     global strip
     global num_pixels
     global pos
+    global breathe_pos
     strip = s
     num_pixels = np
     pos = 0
+    breathe_pos = 0
 
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
@@ -131,21 +133,7 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
             strip.show()
             time.sleep(1 / 120.0) # Give it a 'wave' effect
 
-# It is not recommended to use setBrightness except for in setup because of timing issues,
-# So it is done manually.
-def breathe(speed = 0.1):
-    # global pos
-    # for i in range(0, num_pixels):
-    #     c = hex_to_rgb(strip.getPixelColor(i))
-    #     red, green, blue = c[0], c[1], c[2]
-    #
-    #     # Convert rgb to hsl, change luminance value, convert back to rgb
-    #     hsl = rgb_to_hsl(red, green, blue)
-    #     hsl[2] = translate(math.sin(speed * pos), -1, 1, 0, 100)
-    #     rgb = hsl_to_rgb(hsl[0], hsl[1], hsl[2])
-    #     rgb = rgb_to_hex(rgb[0], rgb[1], rgb[2])
-    #
-    #     strip.setPixelColor(i, rgb)
-    #
-    # pos += 1
-    strip.setBrightness(int(translate(math.sin(speed * pos), -1, 1, 0, 100)))
+def breathe(speed = 0.05):
+    global breathe_pos
+    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 0, 100)))
+    breathe_pos += 1
