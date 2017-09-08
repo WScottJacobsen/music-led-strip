@@ -28,7 +28,7 @@ def set_strip(s, np):
     num_pixels = np
     pos = 0
     breathe_pos = 0
-    wander(0.6, None, 0, False) # Give it starting values
+    wander(0.4, None, 0, False) # Give it starting values
 
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
@@ -93,7 +93,7 @@ def all_random():
     for i in range(0, num_pixels):
         strip.setPixelColor(i, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-def wander_2(speed = 0.3):
+def wander_2(speed = 0.8):
     # Get current color of each pixel, change it to hsv, increment hue value, convert back to rgb and set color
     for i in range(0, num_pixels):
         curr_color = strip.getPixelColor(i)
