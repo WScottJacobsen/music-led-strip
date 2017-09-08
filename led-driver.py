@@ -7,11 +7,12 @@ num_pixels = 288 # Number of LEDs in strip
 
 strip = Adafruit_DotStar(num_pixels, 12000000, order='bgr') # Initialize strip
 strip.begin()
-strip.setBrightness(10) # Save my eyes
+max_brightness = 90
+strip.setBrightness(max_brightness) # Save my eyes
 
 effect.set_strip(strip, num_pixels) # Set up effects module
 while True:
     strip.show()
     effect.solid_rainbow()
-    effect.breathe()
+    effect.breathe(0.5, max_brightness)
     time.sleep(1 / 60.0) # Pause 20 milliseconds (~60 fps)

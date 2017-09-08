@@ -133,7 +133,7 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
             strip.show()
             time.sleep(1 / 120.0) # Give it a 'wave' effect
 
-def breathe(speed = 0.05):
+def breathe(speed = 0.05, max_brightness = 100):
     global breathe_pos
-    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 10, 100)))
+    strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 10, max_brightness)))
     breathe_pos += 1
