@@ -29,6 +29,56 @@ def set_strip(s, np):
 def rgb_to_hex(r, g, b):
     return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
 
+def hex_to_rgb(color):
+    r = ((color >> 16) & 0xFF) / 255.0
+    g = ((color >> 8) & 0xFF) / 255.0
+    b = ((color) & 0xFF) / 255.0
+    return [r, g, b]
+
+# From: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+def hsl_to_rgb(h, s, l):
+    r, g, b
+
+    if s == 0:
+        r = g = b = l # Monochromatic
+    else:
+        def hue2rgb(p, q, t):
+            if(t < 0): t += 1
+            if(t > 1): t -= 1
+            if(t < 1/6): return p + (q - p) * 6 * t
+            if(t < 1/2): return q
+            if(t < 2/3): return p + (q - p) * (2/3 - t) * 6
+            return p
+        q = l < 0.5 ? l * (1 + s) : l + s - l * s
+        p = 2 * l - q
+        r = hue2rgb(p, q, h + 1/3)
+        g = hue2rgb(p, q, h)
+        b = hue2rgb(p, q, h - 1/3)
+
+    return [int(math.round(r * 255)), int(math.round(g * 255)), int(math.round(b * 255))]
+
+# Also from: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+def rgb_to_hsl(r, g, b):
+    r /= 255, g /= 255, b /= 255
+    max_val, min_val = max(r, g, b), min(r, g, b)
+    h, s, l = (max_val + min_val) / 2
+
+    if max_val == min_val:
+        h = s = 0 # Monochromatic
+    else:
+        d = max_val - min_val
+        s = l > 0.5 ? d / (2 - max_val - min_val) : d / (max_val + min_val)
+        def get_h(x):
+            return {
+                r: (g - b) / d + (g < b ? 6 : 0),
+                g: (b - r) / d + 2,
+                b: (r - g) / d + 4
+            }[x]
+        h = get_h(max_val)
+        h /= 6
+
+    return [h, s, l]
+
 def get_rainbow_color(frequency = 0.3, position = 0):
     # Uses three out of sync sin waves to have a smooth transition between colors
     # Frequency is how quickly it moves throught the rainbow
@@ -77,6 +127,19 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
             print("wave")
             time.sleep(1 / 120.0) # Give it a 'wave' effect
 
+# It is not recommended to use setBrightness except for in setup because of timing issues,
+# So it is done manually.
 def breathe(speed = 0.1):
-    strip.setBrightness(translate(math.sin(speed * pos), -1, 1, 0, 100))
+    for i in range(0, num_pixels):
+        c = hex_to_rgb(strand.getPixelColor(i))
+        red, green, blue = c[0], c[1], c[2]
+
+        # Convert rgb to hsl, change luminance value, convert back to rgb
+        hsl = rgb_to_hsl(red, green, blue)
+        hsl[2] = translate(math.sin(speed * pos), -1, 1, 0, 100)
+        rgb = hsl_to_rgb(hsl[0], hsl[1], hsl[2])
+        rgb = rgb_to_hex(rgb)
+
+        strip.setPixelColor(i, rgb)
+
     pos += 1
