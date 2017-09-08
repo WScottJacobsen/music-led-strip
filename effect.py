@@ -106,7 +106,7 @@ def wander_2(speed = 0.03):
         r = translate(rgb[0], 0, 1, 0, 255)
         g = translate(rgb[1], 0, 1, 0, 255)
         b = translate(rgb[2], 0, 1, 0, 255)
-        strip.setPixelColor(i, r, g, b)
+        strip.setPixelColor(i, int(r), int(g), int(b))
 
 def breathe(speed = 0.05, max_brightness = 100):
     global breathe_pos
