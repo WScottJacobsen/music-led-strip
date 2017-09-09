@@ -99,8 +99,8 @@ def usa(speed = 1 / 90.0, frequency = 10):
     for i in range(0, num_pixels / frequency):
         for x in range(0, frequency):
             strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[usa_ind])
-        usa_ind += 1
-        usa_ind %= len(colors)
+        #usa_ind += 1
+        #usa_ind %= len(colors)
     time.sleep(speed)
     pos += 1
 
