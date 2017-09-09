@@ -101,7 +101,7 @@ def usa(speed = 1 / 90.0, frequency = 10):
             strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[usa_ind])
         usa_ind += 1
         usa_ind %= len(colors)
-    pos += 1
+    usa_ind += 1
 
 def all_random():
     for i in range(0, num_pixels):
