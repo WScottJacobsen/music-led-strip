@@ -1,10 +1,11 @@
 # Effects in this module:
 # Rainbow Wave  - moving_rainbow - Rainbow 'wave' that moves down strip
-# Solid Rainbow - solid_rainbow  - Full strip
+# Solid Rainbow - solid_rainbow  - Full strip cycling rainbow
 # Wander        - wander         - Color wanders relative to the pixel before it
 # Wander 2      - wander_2       - Color wanders relative to previous color
 # Breate        - breathe        - Can be used with any effect, brightness pulses
 # All Random    - all_random     - Assigns all pixels a random color, ugly as shit
+# USA           - usa            - Red white and blue bands
 
 # Functions in this module
 # set_strip         - initialize variables
@@ -88,6 +89,17 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
         if wave:
             strip.show()
             time.sleep(1 / 120.0) # Give it a 'wave' effect
+
+def usa(speed = 1 / 90.0, frequency = 10):
+    for i in range(0, num_pixels / frequency):
+         for x in range(0, frequency):
+             if i % 3 == 0:
+                 color = rgb_to_hex(255, 0, 0)
+             elif i % 3 == 1:
+                 color = rgb_to_hex(0, 0, 255)
+             else
+                 color = rgb_to_hex(255, 255, 255)
+             strip.setPixelColor(i * frequency + x, color)
 
 def all_random():
     for i in range(0, num_pixels):
