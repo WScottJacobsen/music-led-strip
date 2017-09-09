@@ -96,7 +96,7 @@ def usa(speed = 1 / 90.0, frequency = 10):
     global pos
     global usa_ind
     colors = [rgb_to_hex(255, 0, 0), rgb_to_hex(0, 0, 255), rgb_to_hex(255, 255, 255)]
-    for i in range(0, num_pixels / frequency):\
+    for i in range(0, num_pixels / frequency):
         usa_ind += 1
         usa_ind %= len(colors)
         for x in range(0, frequency):
