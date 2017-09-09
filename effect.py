@@ -25,10 +25,12 @@ def set_strip(s, np):
     global num_pixels
     global pos
     global breathe_pos
+    global usa_ind
     strip = s
     num_pixels = np
     pos = 0
     breathe_pos = 0
+    usa_ind = 0
     wander(0.4, None, 0, False) # Give it starting values
 
 def rgb_to_hex(r, g, b):
@@ -92,13 +94,13 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
 
 def usa(speed = 1 / 90.0, frequency = 10):
     global pos
+    global usa_ind
     colors = [rgb_to_hex(255, 0, 0), rgb_to_hex(0, 0, 255), rgb_to_hex(255, 255, 255)]
-    ind = 0
     for i in range(0, num_pixels / frequency):
         for x in range(0, frequency):
-            strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[ind])
-        ind += 1
-        ind %= len(colors)
+            strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[usa_ind])
+        usa_ind += 1
+        usa_ind %= len(colors)
     pos += 1
 
 def all_random():
