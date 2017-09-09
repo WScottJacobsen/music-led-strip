@@ -93,14 +93,15 @@ def wander(speed = 0.3, start_color = None, index = 0, wave = True):
 def usa(speed = 1 / 90.0, frequency = 10):
     global pos
     for i in range(0, num_pixels / frequency):
-         for x in range(0, frequency):
-             if i % 3 == 0:
-                 color = rgb_to_hex(255, 0, 0)
-             elif i % 3 == 1:
-                 color = rgb_to_hex(0, 0, 255)
-             else:
-                 color = rgb_to_hex(255, 255, 255)
-             strip.setPixelColor((i * frequency + x + pos) % num_pixels, color)
+        for x in range(0, frequency):
+            if i % 3 == 0:
+                color = rgb_to_hex(255, 0, 0)
+            elif i % 3 == 1:
+                color = rgb_to_hex(0, 0, 255)
+            else:
+                color = rgb_to_hex(255, 255, 255)
+            strip.setPixelColor((i * frequency + x + pos) % num_pixels, color)
+    pos += 1
 
 def all_random():
     for i in range(0, num_pixels):
@@ -116,7 +117,7 @@ def wander_2(speed = 0.01):
 
         strip.setPixelColor(i, int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
-def breathe(speed = 0.01, max_brightness = 100):
+def breathe(speed = 0.03, max_brightness = 100):
     global breathe_pos
     strip.setBrightness(int(translate(math.sin(speed * breathe_pos), -1, 1, 5, max_brightness)))
     breathe_pos += 1
