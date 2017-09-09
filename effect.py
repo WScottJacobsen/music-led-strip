@@ -97,7 +97,7 @@ def usa(speed = 1 / 90.0, frequency = 10):
                  color = rgb_to_hex(255, 0, 0)
              elif i % 3 == 1:
                  color = rgb_to_hex(0, 0, 255)
-             else
+             else:
                  color = rgb_to_hex(255, 255, 255)
              strip.setPixelColor(i * frequency + x, color)
 
