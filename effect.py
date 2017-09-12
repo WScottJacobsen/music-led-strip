@@ -25,12 +25,10 @@ def set_strip(s, np):
     global num_pixels
     global pos
     global breathe_pos
-    global usa_ind
     strip = s
     num_pixels = np
     pos = 0
     breathe_pos = 0
-    usa_ind = 0
     wander(0.4, None, 0, False) # Give it starting values
 
 def rgb_to_hex(r, g, b):
@@ -97,20 +95,19 @@ def wander_2(speed = 0.01):
     for i in range(0, num_pixels):
         curr_color = strip.getPixelColor(i)
         rgb = hex_to_rgb(curr_color)
-        hsv = colorsys.rgb_to_hsv((rgb[0] / 255.0 + random.uniform(-0.25, 1) * speed) * 255 % 255, rgb[1], rgb[2])
-        rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], hsv[2])
+        hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
+        hue = hsv[0] + random.uniform(-0.75, 1) * speed
+        hue = hue if hue > 0 else 0
+        rgb = colorsys.hsv_to_rgb(hue, hsv[1], hsv[2])
 
         strip.setPixelColor(i, int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def usa(speed = 1 / 90.0, frequency = 10):
     global pos
-    global usa_ind
-    colors = [rgb_to_hex(255, 0, 0), rgb_to_hex(0, 0, 255), rgb_to_hex(255, 255, 255)]
+    colors = [0xFF0000, 0xFFFFFF, 0x0000FF]
     for i in range(0, num_pixels / frequency):
-        usa_ind += 1
-        usa_ind %= len(colors)
         for x in range(0, frequency):
-            strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[usa_ind])
+            strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[i % len(colors)])
     time.sleep(speed)
     pos += 1
 
