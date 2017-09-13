@@ -6,6 +6,7 @@
 # Breate        - breathe        - Can be used with any effect, brightness pulses
 # All Random    - all_random     - Assigns all pixels a random color, ugly as shit
 # USA           - usa            - Red white and blue bands
+# Pulse Rainbow - pulse_rainbow  - Pulses through ROYGBIV
 
 # Functions in this module
 # set_strip         - initialize variables
@@ -110,6 +111,15 @@ def usa(speed = 1 / 90.0, frequency = 10):
             strip.setPixelColor((i * frequency + x + pos) % num_pixels, colors[i % len(colors)])
     time.sleep(speed)
     pos += 1
+
+def pulse_rainbow(speed = 1 / 4.0):
+    global pos
+    #                   red      orange    yellow    green      blue     indigo    violet
+    rainbow_colors = [0xFF0000, 0xFFA500, 0xFFFF00, 0x00FF00, 0x0000FF, 0x4B0082, 0xEE82EE]
+    pos %= len(rainbow_colors)
+    set_all_pixels(rainbow_colors[pos])
+    pos += 1
+    time.sleep(speed)
 
 def all_random():
     for i in range(0, num_pixels):

@@ -6,7 +6,6 @@ import RPi.GPIO as GPIO
 
 num_pixels  = 288 # Number of LEDs in strip
 pin_numbers = []  # Pin numbers for buttons
-button_vals = []
 
 strip = Adafruit_DotStar(num_pixels, 12000000, order='bgr') # Initialize strip
 strip.begin()
@@ -26,18 +25,23 @@ while True:
 
     # Get button states, and execute appropriate effects
     for i in len(pin_numbers):
-        button_vals[i] = !GPIO.input(pin_numbers[i])
-        if i == 0 && button_vals[i]:   # Solid Rainbow
-            effect.solid_rainbow()
-        elif i == 1 && button_vals[i]: # Moving Rainbow
-            effect.moving_rainbow()
-        elif i == 2 && button_vals[i]: # Red White and Blue
-            effect.usa()
-        elif i == 3 && button_vals[i]: # Wander
-            effect.wander()
-        elif i == 4 && button_vals[i]: # Wander 2
-            effect.wander_2()
-        elif i == 5 && button_vals[i]: # Solid Color (white for now)
-            effect.set_all_pixels(0xFFFFFF)
+        button_val = !GPIO.input(pin_numbers[i])
+        if button_val:
+            if i == 0:   # Solid Rainbow
+                effect.solid_rainbow()
+            elif i == 1: # Moving Rainbow
+                effect.moving_rainbow()
+            elif i == 2: # Red White and Blue
+                effect.usa()
+            elif i == 3: # Wander
+                effect.wander()
+            elif i == 4: # Wander 2
+                effect.wander_2()
+            elif i == 5: # Solid Color (white for now)
+                effect.set_all_pixels(0xFFFFFF)
+            elif i == 6: # Pulse Rainbow
+                effect.pulse_rainbow()
+            elif i == 7: # Music responsive
+                #TODO
 
     time.sleep(1 / 60.0) # Pause 17 milliseconds (~60 fps)
