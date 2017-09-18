@@ -1,0 +1,49 @@
++--------------------+
+|                    |
+| S1      B1      P1 |
+| S2      B2      P2 |
+| S3      B3      P3 |
+| S4      B4      P4 |
+|         B5      P5 |
+|         B6      P6 |
+|         B7      P7 |
+|         B8      P8 |
+|         B9      P9 |
+|         B10     P10|
+|                    |
++--------------------+
+
+S1 - On/Off
+S2 - Breathe
+S3 - Blink
+S4 - Toggle potentiometers (maybe)
+
+B1 - Moving Rainbow
+P1 - Moving Rainbow speed
+
+B2 - Solid Rainbow
+P2 - Solid Rainbow speed
+
+B3 - USA
+P3 - USA speed
+
+B4 - Wander
+P4 - Wander speed
+
+B5 - Wander 2
+P5 - Wander 2 speed
+
+B6 - Solid Color
+P6 - Color for Solid Color
+
+B7 - Pulse Rainbow
+P7 - Pulse Rainbow speed
+
+B8 - Music Responsive
+P8 - TBD
+
+B9 - Go to max brightness
+P9 - Change max brightness
+
+B10 - Reset program (maybe)
+P10 - TBD
