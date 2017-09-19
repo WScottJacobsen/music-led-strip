@@ -70,9 +70,9 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
     return rightMin + (valueScaled * rightSpan) # Convert the 0-1 range into a value in the right range.
 
-# Not simply using setBrightness() because (1) Its not reccommended, and (2) The power recieved from the 3.3V pin is enough to make it so that it doesn't fully turn off that way
-def set_brightness(brightness = 1, index = -1):
-    if index == -1:
+# Not simply using setBrightness() because (1) Its not recommended, and (2) The power recieved from the 3.3V pin is enough to make it so that it doesn't fully turn off that way
+def set_brightness(brightness = 1, index = None):
+    if index == None:
         # Convert current color of pixel into hsv, change 'v' value, convert back to rgb
         for i in range(num_pixels):
             curr_color = strip.getPixelColor(i)
@@ -184,4 +184,12 @@ def breathe(speed = 0.03):
     breathe_pos += 1
 
 def blink(off_time = 1 / 5.0, off_freq = 1 / 2.0):
-    #TODO
+    global when_to_flash
+    global turn_off_time
+    if time.time() >= when_to_flash:
+        if time.time() >= turn_off_time:
+            when_to_flash = time.time() + off_freq
+            turn_off_time = when_to_flash + off_time
+            set_brightness(0)
+        else:
+            set_brightness(1)
