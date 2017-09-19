@@ -3,7 +3,7 @@
 | S1      B1      P1 |
 | S2      B2      P2 |
 | S3      B3      P3 |
-| S4      B4      P4 |
+|         B4      P4 |
 |         B5      P5 |
 |         B6      P6 |
 |         B7      P7 |
@@ -16,7 +16,6 @@
 S1 - On/Off
 S2 - Breathe
 S3 - Blink
-S4 - Toggle potentiometers (maybe)
 
 B1 - Moving Rainbow
 P1 - Moving Rainbow speed
@@ -47,3 +46,36 @@ P9 - Change max brightness
 
 B10 - Reset program (maybe)
 P10 - TBD
+
+PINS
+
+B1  - 6
+B2  - 5
+B3  - 9
+B4  - 22
+B5  - 27
+B6  - 17
+B7  - 4
+B8  - 18
+B9  - 23
+B10 - 24
+
+S1 - 26
+S2 - 19
+S3 - 13
+
+P1  - CH7
+P2  - CH6
+P3  - CH5
+P4  - CH4
+P5  - CH3
+P6  - CH2
+P7  - CH1
+P8  - N/A
+P9  - CH0
+P10 - N/A
+
+SPICLK  = 21
+SPIMISO = 20
+SPIMOSI = 16
+SPICS   = 12
