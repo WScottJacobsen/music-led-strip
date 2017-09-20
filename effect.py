@@ -11,16 +11,18 @@
 
 # Functions in this module
 # set_strip         - initialize variables
+# read_adc          - get value from audio digital convertor
+# from_id           - display effects from a list of effect id's
 # update_brightness - keeps track of max_brightness
 # rgb_to_hex        - returns integer value from red, green, and blue channels
 # hex_to_rgb        - returns red green and blue values from integer
 # get_rainbow_color - returns color, given position in the rainbow
 # set_all_pixels    - sets all pixels on strip to given color
 # translate         - maps one range of values to a different range of values
-# set_brightness     - a better implementation of strip.setBrightness() using hsv values
 
 import time, math, random, colorsys
 from dotstar import Adafruit_DotStar
+import RPi.GPIO as GPIO
 
 #===================   HELPER FUNCTIONS   ===================#
 
@@ -29,11 +31,62 @@ def set_strip(s, np):
     global num_pixels
     global pos
     global breathe_pos
+    global SPICLK
+    global SPIMOSI
+    global SPIMISO
+    global SPICS
     strip = s
     num_pixels = np
     pos = 0
     breathe_pos = 0
-    wander(0.4, None, 0, False) # Give it starting values
+    # The pins connected from the SPI port on the ADC to the Cobbler
+    SPICLK  = 21
+    SPIMISO = 20
+    SPIMOSI = 16
+    SPICS   = 12
+
+    # set up the SPI interface pins
+    GPIO.setup(SPIMOSI, GPIO.OUT)
+    GPIO.setup(SPIMISO, GPIO.IN)
+    GPIO.setup(SPICLK, GPIO.OUT)
+    GPIO.setup(SPICS, GPIO.OUT)
+    wander(0.4, None, 0, False) # Give it starting colors
+
+# read SPI data from MCP3008 chip, 8 possible adc's (0 thru 7)
+# From https://learn.adafruit.com/reading-a-analog-in-and-controlling-audio-volume-with-the-raspberry-pi?view=all
+def readadc(adcnum, clockpin, mosipin, misopin, cspin):
+        if ((adcnum > 7) or (adcnum < 0)):
+                return -1
+        GPIO.output(cspin, True)
+
+        GPIO.output(clockpin, False)  # start clock low
+        GPIO.output(cspin, False)     # bring CS low
+
+        commandout = adcnum
+        commandout |= 0x18  # start bit + single-ended bit
+        commandout <<= 3    # we only need to send 5 bits here
+        for i in range(5):
+                if (commandout & 0x80):
+                        GPIO.output(mosipin, True)
+                else:
+                        GPIO.output(mosipin, False)
+                commandout <<= 1
+                GPIO.output(clockpin, True)
+                GPIO.output(clockpin, False)
+
+        adcout = 0
+        # read in one empty bit, one null bit and 10 ADC bits
+        for i in range(12):
+                GPIO.output(clockpin, True)
+                GPIO.output(clockpin, False)
+                adcout <<= 1
+                if (GPIO.input(misopin)):
+                        adcout |= 0x1
+
+        GPIO.output(cspin, True)
+
+        adcout >>= 1       # first bit is 'null' so drop it
+        return adcout
 
 def update_brightness(brightness):
     global max_brightness
@@ -70,42 +123,41 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
     return rightMin + (valueScaled * rightSpan) # Convert the 0-1 range into a value in the right range.
 
-# Not simply using setBrightness() because (1) Its not recommended, and (2) The power recieved from the 3.3V pin is enough to make it so that it doesn't fully turn off that way
-def set_brightness(brightness = 1, index = None):
-    if index == None:
-        # Convert current color of pixel into hsv, change 'v' value, convert back to rgb
-        for i in range(num_pixels):
-            curr_color = strip.getPixelColor(i)
-            rgb = hex_to_rgb(curr_color)
-            hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
-            rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], brightness)
-            strip.setPixelColor(i, int(rgb[0]), int(rgb[1]), int(rgb[2]))
-    else:
-        curr_color = strip.getPixelColor(index)
-        rgb = hex_to_rgb(curr_color)
-        hsv = colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2])
-        rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], brightness)
-        strip.setPixelColor(index, int(rgb[0]), int(rgb[1]), int(rgb[2]))
-
-def from_id(vals = [0]):
+def from_id(vals):
     global pos
     for val in vals:
         if val == 0:   # Moving Rainbow
-            moving_rainbow()
+            adc_val = readadc(7, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 0.05, 0.5)
+            moving_rainbow(adc_val)
         elif val == 1: # Solid Rainbow
-            solid_rainbow()
+            adc_val = readadc(6, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 0.05, 0.5)
+            solid_rainbow(adc_val)
         elif val == 2: # Red White and Blue
-            usa()
+            adc_val = readadc(5, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 1 / 150.0, 1 / 30.0)
+            usa(adc_val)
         elif val == 3: # Wander
+            adc_val = readadc(4, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 0.1, 0.6)
             wander()
         elif val == 4: # Wander 2
+            adc_val = readadc(3, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 0.005, 0.1)
             wander_2()
         elif val == 5: # Solid Color (white for now)
-            set_all_pixels(0xFFFFFF)
+            adc_val = readadc(2, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 0, 1)
+            rgb = colorsys(adc_val, 1, 1)
+            set_all_pixels(rgb[0], rgb[1], rgb[2])
         elif val == 6: # Pulse Rainbow
+            adc_val = readadc(1, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 1 / 15.0, 1)
             pulse_rainbow()
         elif val == 7: # Music responsive
             #TODO
+            print("music")
         elif val == 8: # Breathe
             breathe()
         elif val == 9: # Blink
@@ -114,8 +166,11 @@ def from_id(vals = [0]):
             set_all_pixels(0)
             break
         elif val == 11: # Set to max brightness
-            set_brightness(1)
-
+            adc_val = readadc(0, SPICLK, SPIMOSI, SPIMISO, SPICS)
+            adc_val = translate(adc_val, 0, 1024, 0, 100)
+            global max_brightness
+            max_brightness = adc_val
+            strip.setBrightness(max_brightness)
     pos += 1
 
 #===================   EFFECTS   ===================#
@@ -176,11 +231,10 @@ def all_random():
     for i in range(num_pixels):
         strip.setPixelColor(i, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-
 def breathe(speed = 0.03):
     global breathe_pos
     brightness = int(translate(math.sin(speed * breathe_pos), -1, 1, 0, max_brightness))
-    set_brightness(brightness)
+    strip.setBrightness(brightness)
     breathe_pos += 1
 
 def blink(off_time = 1 / 5.0, off_freq = 1 / 2.0):
@@ -190,6 +244,8 @@ def blink(off_time = 1 / 5.0, off_freq = 1 / 2.0):
         if time.time() >= turn_off_time:
             when_to_flash = time.time() + off_freq
             turn_off_time = when_to_flash + off_time
-            set_brightness(0)
+            strip.setBrightness(0)
         else:
-            set_brightness(1)
+            strip.setBrightness(max_brightness)
+    else:
+        strip.setBrightness(max_brightness)
