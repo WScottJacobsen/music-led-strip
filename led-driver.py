@@ -1,41 +1,43 @@
 # Main file to drive LEDs
 
-import time
-import math
+import time, effect
 from dotstar import Adafruit_DotStar
+import RPi.GPIO as GPIO
 
 num_pixels = 288 # Number of LEDs in strip
+pins       = {6: 0, 5: 1, 9: 2, 22: 3, 27: 4, 17: 5, 4: 6, 18: 7, 19: 8, 13: 9, 26: 10, 23: 11}  # Pin Number : Effect ID
+effect_id  = [0] # Keeps track of effects, index 0 reserved for solo effects,
+                 # all other indices are for "supplemental" effects
+supplementals = [8, 9, 10, 11] # List of supplemental effect id's
 
 strip = Adafruit_DotStar(num_pixels, 12000000, order='bgr') # Initialize strip
 strip.begin()
-strip.setBrightness(10) # Save my eyes
+max_brightness = 20 # Save my eyes
+strip.setBrightness(max_brightness)
+effect.update_brightness(max_brightness)
 
-# Rainbow Display
-def moving_rainbow(frequency, start = 0):
-    for i in range(0, num_pixels):
-        color = get_rainbow_color(frequency, i, start)
-        strip.setPixelColor(i, color[0], color[1], color[2])
+effect.set_strip(strip, num_pixels) # Set up effects module
 
-def get_rainbow_color(frequency, start, offset = 0):
-    # Uses three out of sync sin waves to have a smooth transition between colors
-    # Frequency is how quickly it moves throught the rainbow
-    # Start is position in rainbow
-    # Offset is how much the rainbow is offset by (duh)
-    red   = int(math.sin(frequency * (start + offset)) * 127 + 128)
-    green = int(math.sin(frequency * (start + offset) + 2 * math.pi / 3) * 127 + 128)
-    blue  = int(math.sin(frequency * (start + offset) + 4 * math.pi / 3) * 127 + 128)
-    return [red, green, blue]
+# Set up button pins
+GPIO.setmode(GPIO.BCM)
+for pin in pins.keys():
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-# Sets all pixels on strip to same color
-def set_all_pixels(r, g, b):
-    for i in range(0, num_pixels):
-        strip.setPixelColor(i, r, g, b)
-
-start = 0.0
 while True:
-    strip.show()
-    #color = get_rainbow_color(0.1, start)
-    #set_all_pixels(color[0], color[1], color[2]) Solid rainbow effect
-    moving_rainbow(0.1, start)
-    start += 1 # Shifts rainbow down strip
-    time.sleep(1.0 / 60) # Pause 20 milliseconds (~50 fps)
+    strip.show() # Update strip
+
+    # Get button states, and execute appropriate effects
+    for pin, e_id in pins.items():
+        active = not GPIO.input(pin)
+        is_supplemental = e_id in supplementals # Checks if it is a supplemental effect
+        if is_supplemental:
+            if active and e_id not in effect_id:
+                effect_id.append(e_id)
+            else:
+                effect_id.remove(e_id)
+        elif val:
+            effect_id[0] = e_id
+
+        print(effect_id)
+
+    time.sleep(1 / 60.0) # Pause 17 milliseconds (~60 fps)
